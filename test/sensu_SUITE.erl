@@ -58,7 +58,7 @@ t_send_udp(_Cfg) ->
         , protocol = {udp, {port, SrcPort}}
         },
     {ok, Socket} = gen_udp:open(DstPort, [binary, {active, false}]),
-    {ok, ok} = sensu:send(CheckResult, ClientInfo), 
+    {ok, ok} = sensu:send(CheckResult, ClientInfo),
     ResultOfReceive = gen_udp:recv(Socket, 64000),
     ok = gen_udp:close(Socket),
     {ok, {_, _, Data}} = ResultOfReceive,
