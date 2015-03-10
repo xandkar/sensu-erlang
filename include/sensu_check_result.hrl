@@ -1,6 +1,6 @@
 -record(sensu_check_result,
     { name              :: binary()
     , output            :: binary()
-    , status            :: sensu_check_status:t()
+    , status            :: sensu:check_status()
     , extra_params = [] :: sensu_json:object()
     }).
