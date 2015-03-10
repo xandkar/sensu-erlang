@@ -7,6 +7,7 @@
 	compile_all \
 	test \
 	test_all \
+	travis \
 	clean \
 	clean_all \
 	dialyze
@@ -18,6 +19,11 @@ all: \
 	compile_all \
 	test \
 	dialyze
+
+travis: \
+	deps \
+	compile_all \
+	test
 
 deps: \
 	deps_get \
