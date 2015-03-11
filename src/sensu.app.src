@@ -1,5 +1,5 @@
 {application, sensu,
-[   {description, "Sensu external check."}
+[   {description, "Erlang API to send external check result to Sensu client."}
 ,   {vsn, "0.0.0"}
 ,   {registered, []}
 ,   {applications,
