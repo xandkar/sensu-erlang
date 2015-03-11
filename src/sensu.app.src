@@ -1,13 +1,14 @@
 {application, sensu,
- [
-  {description, "Sensu external check."},
-  {vsn, "0.0.0"},
-  {registered, []},
-  {applications, [
-                  kernel,
-                  stdlib,
-                  hope,
-                  jsx
-                 ]},
-  {env, []}
- ]}.
+[   {description, "Sensu external check."}
+,   {vsn, "0.0.0"}
+,   {registered, []}
+,   {applications,
+        [ kernel
+        , stdlib
+        , hope
+        , jsx
+        ]}
+, {env,
+    [
+    ]}
+]}.
