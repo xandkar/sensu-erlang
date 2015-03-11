@@ -12,7 +12,8 @@
     ]).
 
 -export(
-    [ send/2
+    [ send/1
+    , send/2
     ]).
 
 -type check_status() ::
@@ -39,6 +40,11 @@
 
 -type io_error() ::
     {sensu_io_error, term()}.
+
+-spec send(check_result()) ->
+    hope_result:t(ok, io_error()).
+send(#sensu_check_result{}=CheckResult) ->
+    send(CheckResult, #sensu_io_params{}).
 
 -spec send(check_result(), io_params()) ->
     hope_result:t(ok, io_error()).
