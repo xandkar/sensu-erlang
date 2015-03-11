@@ -66,10 +66,13 @@ send(
     Send =
         fun (Socket) ->
             CheckResultBin = check_result_to_bin(CheckResult),
-            case gen_udp:send(Socket, DstHost, DstPort, CheckResultBin)
-            of  ok           -> {ok, ok}
-            ;   {error, _}=E -> E
-            end
+            Result =
+                case gen_udp:send(Socket, DstHost, DstPort, CheckResultBin)
+                of  ok           -> {ok, ok}
+                ;   {error, _}=E -> E
+                end,
+            ok = socket_close_if_we_opened_it(Socket, UDPSocketOrPort),
+            Result
         end,
     case hope_result:pipe([Connect, Send], {})
     of  {ok, ok}=Ok     -> Ok
@@ -96,6 +99,11 @@ check_result_to_json(#sensu_check_result
     , {<<"status">> , check_status_to_integer(Status)}
     | ExtraParams
     ].
+
+-spec socket_close_if_we_opened_it(gen_udp:socket(), udp_socket_or_port()) ->
+    ok.
+socket_close_if_we_opened_it(_     , {socket, _}) -> ok;
+socket_close_if_we_opened_it(Socket, {port  , _}) -> ok = gen_udp:close(Socket).
 
 -spec check_status_to_integer(check_status()) ->
     non_neg_integer().
