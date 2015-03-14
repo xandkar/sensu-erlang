@@ -86,7 +86,7 @@ send_and_close_if_opened_by_us(T, Packet) ->
         of  {udp, _, #udp_destination{socket=Sock, address=Adrr, port=Port}} ->
                 {gen_udp, [Sock, Adrr, Port, Packet]}
         ;   {tcp, _, Socket} ->
-                {gen_udp, [Socket, Packet]}
+                {gen_tcp, [Socket, Packet]}
         end,
     Result =
         case erlang:apply(M, send, A)
