@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/ibnfirnas/sensu-erlang.svg?branch=master)](https://travis-ci.org/ibnfirnas/sensu-erlang)
 
 # sensu-erlang
-Erlang API to send check result to Sensu client.
+Erlang API to send external check result to Sensu client
 
 ### Defaults
 
