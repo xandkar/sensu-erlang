@@ -11,20 +11,9 @@ Erlang API to send check result to Sensu client.
 
 ### Examples
 
-Default IO parameters (see `include/sensu_io_params.hrl`):
-```erlang
--include_lib("sensu/include/sensu_check_result.hrl").
+Note that, in order to not pollute your namespace, public records are
+fully-qualified and placed in dedicated include files.
 
-CheckResult =
-    #sensu_check_result
-    { name   = <<"lord.business.sanity_check">>
-    , output = <<"Everything is awesome!">>
-    , status = ok
-    },
-{ok, ok} = sensu:send(CheckResult)
-```
-
-Custom host and UDP ports:
 ```erlang
 -include_lib("sensu/include/sensu_check_result.hrl").
 -include_lib("sensu/include/sensu_io_params.hrl").
@@ -35,6 +24,11 @@ CheckResult =
     , output = <<"Everything is awesome!">>
     , status = ok
     },
+
+% Default IO parameters (see `include/sensu_io_params.hrl`):
+{ok, ok} = sensu:send(CheckResult)
+
+% Custom host and UDP ports:
 IOParams =
     #sensu_io_params
     { host = "example.local"
@@ -42,32 +36,10 @@ IOParams =
     , protocol = {udp, {udp_port, 5000}}
     },
 {ok, ok} = sensu:send(CheckResult, IOParams)
-```
 
-TCP with default port and host:
-```erlang
--include_lib("sensu/include/sensu_check_result.hrl").
--include_lib("sensu/include/sensu_io_params.hrl").
-
-CheckResult =
-    #sensu_check_result
-    { name   = <<"lord.business.sanity_check">>
-    , output = <<"Everything is awesome!">>
-    , status = ok
-    },
+% TCP with default port and host:
 {ok, ok} = sensu:send(CheckResult, #sensu_io_params{protocol = {tcp, {tcp_timeout, 5000}}})
-```
 
-Use existing TCP socket:
-```erlang
--include_lib("sensu/include/sensu_check_result.hrl").
--include_lib("sensu/include/sensu_io_params.hrl").
-
-CheckResult =
-    #sensu_check_result
-    { name   = <<"lord.business.sanity_check">>
-    , output = <<"Everything is awesome!">>
-    , status = ok
-    },
+% TCP with existing socket:
 {ok, ok} = sensu:send(CheckResult, #sensu_io_params{protocol = {tcp, {tcp_socket, Socket}}})
 ```
