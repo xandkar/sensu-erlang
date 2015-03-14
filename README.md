@@ -3,9 +3,15 @@
 # sensu-erlang
 Erlang API to send check result to Sensu client.
 
+### Defaults
+
+- host: `"localhost"`
+- port: `3030`
+- protocol: `{udp, {udp_port, 3031}}`
+
 ### Examples
 
-Using default IO parameters (see `include/sensu_io_params.hrl`):
+Default IO parameters (see `include/sensu_io_params.hrl`):
 ```erlang
 -include_lib("sensu/include/sensu_check_result.hrl").
 
@@ -18,7 +24,7 @@ CheckResult =
 {ok, ok} = sensu:send(CheckResult)
 ```
 
-Specifying IO parameters:
+Custom host and UDP ports:
 ```erlang
 -include_lib("sensu/include/sensu_check_result.hrl").
 -include_lib("sensu/include/sensu_io_params.hrl").
@@ -31,9 +37,23 @@ CheckResult =
     },
 IOParams =
     #sensu_io_params
-    { host = "localhost"
+    { host = "example.local"
     , port = 4000
-    , protocol = {udp, {port, 5000}}
+    , protocol = {udp, {udp_port, 5000}}
     },
 {ok, ok} = sensu:send(CheckResult, IOParams)
+```
+
+TCP with default port and host:
+```erlang
+-include_lib("sensu/include/sensu_check_result.hrl").
+-include_lib("sensu/include/sensu_io_params.hrl").
+
+CheckResult =
+    #sensu_check_result
+    { name   = <<"lord.business.sanity_check">>
+    , output = <<"Everything is awesome!">>
+    , status = ok
+    },
+{ok, ok} = sensu:send(CheckResult, #sensu_io_params{protocol = {tcp, {tcp_timeout, 5000}}})
 ```

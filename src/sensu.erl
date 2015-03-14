@@ -23,13 +23,18 @@
     .
 
 -type udp_socket_or_port() ::
-      {port  , inet:port_number()}
-    | {socket, gen_udp:socket()}
+      {udp_port  , inet:port_number()}
+    | {udp_socket, gen_udp:socket()}
+    .
+
+-type tcp_socket_or_timeout() ::
+      {tcp_timeout , timeout()}
+    | {tcp_socket  , gen_udp:socket()}
     .
 
 -type io_protocol() ::
       {udp, udp_socket_or_port()}
-    | {tcp, hope_option:t(gen_tcp:socket())}
+    | {tcp, tcp_socket_or_timeout()}
     .
 
 -type check_result() ::
@@ -39,7 +44,7 @@
     #sensu_io_params{}.
 
 -type io_error() ::
-    {sensu_io_error, term()}.
+    sensu_socket:io_error().
 
 -spec send(check_result()) ->
     hope_result:t(ok, io_error()).
@@ -48,36 +53,15 @@ send(#sensu_check_result{}=CheckResult) ->
 
 -spec send(check_result(), io_params()) ->
     hope_result:t(ok, io_error()).
-send(
-    CheckResult,
-    #sensu_io_params
-    { host     = DstHost
-    , port     = DstPort
-    , protocol = {udp, UDPSocketOrPort}
-    }
-) ->
+send(#sensu_check_result{}=CheckResult, #sensu_io_params{}=IOParams) ->
     Connect =
-        fun ({}) ->
-            case UDPSocketOrPort
-            of  {socket, Socket} -> {ok, Socket}
-            ;   {port, SrcPort}  -> gen_udp:open(SrcPort)
-            end
-        end,
+        fun ({}) -> sensu_socket:open_if_not_provided(IOParams) end,
     Send =
         fun (Socket) ->
             CheckResultBin = check_result_to_bin(CheckResult),
-            Result =
-                case gen_udp:send(Socket, DstHost, DstPort, CheckResultBin)
-                of  ok           -> {ok, ok}
-                ;   {error, _}=E -> E
-                end,
-            ok = socket_close_if_we_opened_it(Socket, UDPSocketOrPort),
-            Result
+            sensu_socket:send_and_close_if_opened_by_us(Socket, CheckResultBin)
         end,
-    case hope_result:pipe([Connect, Send], {})
-    of  {ok, ok}=Ok     -> Ok
-    ;   {error, Reason} -> {error, {sensu_io_error, Reason}}
-    end.
+    hope_result:pipe([Connect, Send], {}).
 
 -spec check_result_to_bin(check_result()) ->
     binary().
@@ -99,11 +83,6 @@ check_result_to_json(#sensu_check_result
     , {<<"status">> , check_status_to_integer(Status)}
     | ExtraParams
     ].
-
--spec socket_close_if_we_opened_it(gen_udp:socket(), udp_socket_or_port()) ->
-    ok.
-socket_close_if_we_opened_it(_     , {socket, _}) -> ok;
-socket_close_if_we_opened_it(Socket, {port  , _}) -> ok = gen_udp:close(Socket).
 
 -spec check_status_to_integer(check_status()) ->
     non_neg_integer().
