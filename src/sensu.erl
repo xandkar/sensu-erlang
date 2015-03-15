@@ -29,7 +29,7 @@
 
 -type tcp_socket_or_timeout() ::
       {tcp_timeout , timeout()}
-    | {tcp_socket  , gen_udp:socket()}
+    | {tcp_socket  , gen_tcp:socket()}
     .
 
 -type io_protocol() ::
