@@ -7,7 +7,7 @@ Erlang API to send external check result to Sensu client
 
 - host: `"localhost"`
 - port: `3030`
-- protocol: `{udp, {udp_port, 3031}}`
+- protocol: `{udp, {udp_src_port, 3031}}`
 
 ### Examples
 
@@ -31,9 +31,9 @@ CheckResult =
 % Custom host and UDP ports:
 IOParams =
     #sensu_io_params
-    { host = "example.local"
-    , port = 4000
-    , protocol = {udp, {udp_port, 5000}}
+    { dst_host = "example.local"
+    , dst_port = 4000
+    , protocol = {udp, {udp_src_port, 5000}}
     },
 {ok, ok} = sensu:send(CheckResult, IOParams)
 

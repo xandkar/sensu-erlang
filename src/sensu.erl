@@ -23,8 +23,8 @@
     .
 
 -type udp_socket_or_port() ::
-      {udp_port  , inet:port_number()}
-    | {udp_socket, gen_udp:socket()}
+      {udp_src_port , inet:port_number()}
+    | {udp_socket   , gen_udp:socket()}
     .
 
 -type tcp_socket_or_timeout() ::

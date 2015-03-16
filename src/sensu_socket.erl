@@ -37,8 +37,8 @@
 -spec open_if_not_provided(sensu:io_params()) ->
     hope_result:t(t(), io_error()).
 open_if_not_provided(#sensu_io_params
-    { host     = Host
-    , port     = Port
+    { dst_host = Host
+    , dst_port = Port
     , protocol = Protocol
     }
 ) ->
@@ -70,7 +70,7 @@ open_if_not_provided(#sensu_io_params
 
 open_udp({udp_socket, Socket}) ->
     {ok, {provided_by_user, Socket}};
-open_udp({udp_port, Port}) ->
+open_udp({udp_src_port, Port}) ->
     case gen_udp:open(Port)
     of  {ok, Socket} ->
             {ok, {opened_by_us, Socket}}

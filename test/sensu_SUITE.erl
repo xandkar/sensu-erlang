@@ -55,9 +55,9 @@ t_send_udp(_Cfg) ->
         },
     IOParams =
         #sensu_io_params
-        { host     = DstHost
-        , port     = DstPort
-        , protocol = {udp, {udp_port, SrcPort}}
+        { dst_host = DstHost
+        , dst_port = DstPort
+        , protocol = {udp, {udp_src_port, SrcPort}}
         },
     {ok, Socket} = gen_udp:open(DstPort, [binary, {active, false}]),
     {ok, ok} = sensu:send(CheckResult, IOParams),
@@ -85,8 +85,8 @@ t_send_tcp(_Cfg) ->
         },
     IOParams =
         #sensu_io_params
-        { host     = DstHost
-        , port     = DstPort
+        { dst_host = DstHost
+        , dst_port = DstPort
         , protocol = {tcp, {tcp_timeout, 5000}}
         },
     ClientPID = self(),
