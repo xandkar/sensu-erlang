@@ -1,6 +1,6 @@
 {application, sensu,
 [   {description, "Erlang API to send external check result to Sensu client."}
-,   {vsn, "0.2.0"}
+,   {vsn, "0.3.0"}
 ,   {registered, []}
 ,   {applications,
         [ kernel

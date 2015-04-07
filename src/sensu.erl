@@ -47,12 +47,12 @@
     sensu_socket:io_error().
 
 -spec send(check_result()) ->
-    hope_result:t(ok, io_error()).
+    hope_result:t({}, io_error()).
 send(#sensu_check_result{}=CheckResult) ->
     send(CheckResult, #sensu_io_params{}).
 
 -spec send(check_result(), io_params()) ->
-    hope_result:t(ok, io_error()).
+    hope_result:t({}, io_error()).
 send(#sensu_check_result{}=CheckResult, #sensu_io_params{}=IOParams) ->
     Connect =
         fun ({}) -> sensu_socket:open_if_not_provided(IOParams) end,

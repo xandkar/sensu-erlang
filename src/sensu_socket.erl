@@ -79,7 +79,7 @@ open_udp({udp_src_port, Port}) ->
     end.
 
 -spec send_and_close_if_opened_by_us(t(), binary()) ->
-    hope_result:t(ok, io_error()).
+    hope_result:t({}, io_error()).
 send_and_close_if_opened_by_us(T, Packet) ->
     {M, A} =
         case T
@@ -90,7 +90,7 @@ send_and_close_if_opened_by_us(T, Packet) ->
         end,
     Result =
         case erlang:apply(M, send, A)
-        of  ok              -> {ok, ok}
+        of  ok              -> {ok, {}}
         ;   {error, Reason} -> io_error_return(Reason)
         end,
     ok = close_if_opened_by_us(T),

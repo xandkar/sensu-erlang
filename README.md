@@ -26,7 +26,7 @@ CheckResult =
     },
 
 % Default IO parameters (see `include/sensu_io_params.hrl`):
-{ok, ok} = sensu:send(CheckResult)
+{ok, {}} = sensu:send(CheckResult)
 
 % Custom host and UDP ports:
 IOParams =
@@ -35,11 +35,11 @@ IOParams =
     , dst_port = 4000
     , protocol = {udp, {udp_src_port, 5000}}
     },
-{ok, ok} = sensu:send(CheckResult, IOParams)
+{ok, {}} = sensu:send(CheckResult, IOParams)
 
 % TCP with default port and host:
-{ok, ok} = sensu:send(CheckResult, #sensu_io_params{protocol = {tcp, {tcp_timeout, 5000}}})
+{ok, {}} = sensu:send(CheckResult, #sensu_io_params{protocol = {tcp, {tcp_timeout, 5000}}})
 
 % TCP with existing socket:
-{ok, ok} = sensu:send(CheckResult, #sensu_io_params{protocol = {tcp, {tcp_socket, Socket}}})
+{ok, {}} = sensu:send(CheckResult, #sensu_io_params{protocol = {tcp, {tcp_socket, Socket}}})
 ```

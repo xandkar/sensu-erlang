@@ -60,7 +60,7 @@ t_send_udp(_Cfg) ->
         , protocol = {udp, {udp_src_port, SrcPort}}
         },
     {ok, Socket} = gen_udp:open(DstPort, [binary, {active, false}]),
-    {ok, ok} = sensu:send(CheckResult, IOParams),
+    {ok, {}} = sensu:send(CheckResult, IOParams),
     ResultOfReceive = gen_udp:recv(Socket, 64000),
     ok = gen_udp:close(Socket),
     {ok, {_, _, Data}} = ResultOfReceive,
@@ -100,7 +100,7 @@ t_send_tcp(_Cfg) ->
         ClientPID ! {self(), Data}
     end),
     receive {ServerPID, ready} -> ok end,
-    {ok, ok} = sensu:send(CheckResult, IOParams),
+    {ok, {}} = sensu:send(CheckResult, IOParams),
     Data =
         receive
             {'DOWN', ServerRef, process, ServerPID, ExitReason} ->
